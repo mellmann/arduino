@@ -87,7 +87,8 @@ MyTimer timer; // used by blink
 
 
 // load animation
-int loadState = 0;
+const int loadStateMin = 36; // start at 50%
+int loadState = loadStateMin;
 int loadStep = 3;
 int maxLoadStep = 3;
 
@@ -209,7 +210,7 @@ void loop() {
         timer.reset();
         animation_state = LOADING;
         setPixel(0,NUMPIXELS,0);
-        loadState = 0;
+        loadState = loadStateMin;
       }
       break;
     default: break; // should never happen
