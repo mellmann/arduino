@@ -1,8 +1,8 @@
 #include <Adafruit_DotStar.h>
 
 // Because conditional #includes don't work w/Arduino sketches...
-//#include <SPI.h>     // COMMENT OUT THIS LINE FOR GEMMA OR TRINKET
-#include <avr/power.h> // ENABLE THIS LINE FOR GEMMA OR TRINKET
+#include <SPI.h>     // COMMENT OUT THIS LINE FOR GEMMA OR TRINKET
+//#include <avr/power.h> // ENABLE THIS LINE FOR GEMMA OR TRINKET
 
 
 #define NUMPIXELS 30 // Number of LEDs in strip
