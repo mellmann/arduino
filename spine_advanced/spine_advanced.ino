@@ -137,7 +137,7 @@ void blinkAnimation()
   if(!blinkState && timer.getDuration() > blinkTimeOff) {
     blinkState = true;
     timer.reset();
-    setPixel(blinkBegin, blinkEnd, max_brightness);
+    setPixel(blinkBegin, blinkEnd, 128);
     blinkCount++; // count the on states
   }
   
