@@ -87,7 +87,7 @@ MyTimer timer; // used by blink
 
 
 // load animation
-const int loadStateMin = 36; // start at 50%
+const int loadStateMin = 0; // minimal load level
 int loadState = loadStateMin;
 int loadStep = 3;
 int maxLoadStep = 3;
