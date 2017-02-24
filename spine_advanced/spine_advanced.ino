@@ -41,7 +41,7 @@ void setup() {
 
 // control parameter for the brightness
 uint32_t max_brightness = 128;
-uint32_t max_delay = 50;
+uint32_t max_delay = 37;
 
 // animation state
 enum AnimationState 
@@ -105,6 +105,8 @@ void setPixel(int first, int last, uint8_t value) {
 
 void spineAnimation() 
 {
+
+  
   if(++puls_position > NUMPIXELS) {
     setPixel(puls_position, 0); // off
     puls_position = -puls_length;
@@ -180,8 +182,8 @@ void loop() {
   
   int val2 = analogRead(1); // #2
   //Serial.println(val2);
-  max_delay = map(val2, 0, 1023, 0, 60);
-
+  //max_delay = map(val2, 0, 1023, 0, 60);
+  
   switch(animation_state)
   {
     case LOADING:
@@ -203,9 +205,11 @@ void loop() {
       break;
     case RUN_SPINE: 
       spineAnimation();
-      if(timer.getDuration() > 3000 && puls_position == 0) {
+      if(timer.getDuration() > 15000 && puls_position == 0) {
         timer.reset();
         animation_state = LOADING;
+        setPixel(0,NUMPIXELS,0);
+        loadState = 0;
       }
       break;
     default: break; // should never happen
