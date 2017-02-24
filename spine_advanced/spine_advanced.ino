@@ -5,7 +5,7 @@
 //#include <avr/power.h> // ENABLE THIS LINE FOR GEMMA OR TRINKET
 
 
-#define NUMPIXELS 30 // Number of LEDs in strip
+#define NUMPIXELS 72 // Number of LEDs in strip
 
 // Here's how to control the LEDs from any two pins:
 #define DATAPIN    0
@@ -174,7 +174,7 @@ void loop() {
   int val = analogRead(3); // #3?
   //Serial.print(val);
   //Serial.print(", ");
-  max_brightness = map(val, 0, 1023, 0, 255);
+  //max_brightness = map(val, 0, 1023, 0, 255);
   
   int val2 = analogRead(1); // #2
   //Serial.println(val2);
@@ -201,7 +201,7 @@ void loop() {
       break;
     case RUN_SPINE: 
       spineAnimation();
-      if(timer.getDuration() > 3000) {
+      if(timer.getDuration() > 3000 && puls_position == 0) {
         timer.reset();
         animation_state = LOADING;
       }
