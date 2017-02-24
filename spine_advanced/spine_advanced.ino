@@ -5,6 +5,19 @@
 //#include <avr/power.h> // ENABLE THIS LINE FOR GEMMA OR TRINKET
 
 
+// pins for UNO Controller
+// 1 - potti 1
+// 2 - potti 2
+// 4 - DATA
+// 5 - clock
+
+// pins or Trinket Controller
+// 1 - potti 1
+// 2 - potti 2
+// 4 - DATA
+// 5 - clock
+
+
 #define NUMPIXELS 72 // Number of LEDs in strip
 
 // Here's how to control the LEDs from any two pins:
