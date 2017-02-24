@@ -23,6 +23,10 @@ Adafruit_DotStar strip = Adafruit_DotStar(
 //Adafruit_DotStar strip = Adafruit_DotStar(NUMPIXELS, DOTSTAR_BRG);
 
 
+// include some our tools
+#include "MyTimer.h"
+
+
 void setup() {
 
 #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000L)
@@ -60,6 +64,16 @@ uint32_t colorf[puls_length] =
 // spine animation
 int puls_position = -puls_length;
 
+
+// blink parameters
+const int blinkTimeOn = 500; // in ms
+const int blinkTimeOff = 500; // in ms
+const int blinkNumber = 3;
+// 
+int blinkCount = 0; // number of executed blinks
+bool blinkState = false; // false ~ off, true ~on
+
+MyTimer timer;
 
 void setPixel(uint16_t n, uint8_t value) {
     strip.setPixelColor(n,0,value,0);
@@ -100,9 +114,22 @@ void spineAnimation()
   delay(max(0,d));
 }
 
-void blinkAnimation() 
+void blinkAnimation(int blinkBegin, int blinkEnd) 
 {
+  // turn on
+  if(!blinkState && timer.getDuration() > blinkTimeOff) {
+    blinkState = true;
+    timer.reset();
+    setPixel(blinkBegin, blinkEnd, 128); // max brigtness?
+    blinkCount++; // count the on states
+  }
   
+  // turn off
+  if(blinkState && timer.getDuration() > blinkTimeOn) {
+    blinkState = false;
+    timer.reset();
+    setPixel(blinkBegin, blinkEnd, 0);
+  }
 }
 
 
@@ -119,6 +146,14 @@ void loop() {
   max_delay = map(val2, 0, 1023, 0, 60);
   
   spineAnimation();
+
+
+  int blinkBegin = 10;
+  int blinkEnd = 13;
+
+  if(blinkCount < blinkNumber) {
+    blinkAnimation(blinkBegin, blinkEnd);
+  }
 }
 
 
