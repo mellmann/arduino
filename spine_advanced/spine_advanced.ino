@@ -65,15 +65,24 @@ uint32_t colorf[puls_length] =
 int puls_position = -puls_length;
 
 
-// blink parameters
+// blink animation
 const int blinkTimeOn = 500; // in ms
 const int blinkTimeOff = 500; // in ms
 const int blinkNumber = 3;
 // 
 int blinkCount = 0; // number of executed blinks
 bool blinkState = false; // false ~ off, true ~on
+int blinkBegin = 0;
+int blinkEnd = NUMPIXELS;
 
-MyTimer timer;
+MyTimer timer; // used by blink
+
+
+// load animation
+int loadState = 0;
+int loadStep = 3;
+
+
 
 void setPixel(uint16_t n, uint8_t value) {
     strip.setPixelColor(n,0,value,0);
@@ -114,7 +123,7 @@ void spineAnimation()
   delay(max(0,d));
 }
 
-void blinkAnimation(int blinkBegin, int blinkEnd) 
+void blinkAnimation() 
 {
   // turn on
   if(!blinkState && timer.getDuration() > blinkTimeOff) {
@@ -129,6 +138,24 @@ void blinkAnimation(int blinkBegin, int blinkEnd)
     blinkState = false;
     timer.reset();
     setPixel(blinkBegin, blinkEnd, 0);
+    blinkCount++;
+  }
+}
+
+
+void loadAnimation(){
+  // blink the next pixels to be loaded
+  blinkBegin = loadState;
+  blinkEnd   = loadState + loadStep;
+  
+  if(blinkCount < 2*blinkNumber) {
+    blinkAnimation(blinkBegin, blinkEnd);
+  } else {
+    loadState = min(loadState + value, NUMPIXELS);
+    // reset the blink state
+    blinkState = false;
+    blinkCount = 0;
+    timer.reset();
   }
 }
 
@@ -145,15 +172,11 @@ void loop() {
   //Serial.println(val2);
   max_delay = map(val2, 0, 1023, 0, 60);
   
-  spineAnimation();
+  //spineAnimation();
 
-
-  int blinkBegin = 10;
-  int blinkEnd = 13;
-
-  if(blinkCount < blinkNumber) {
-    blinkAnimation(blinkBegin, blinkEnd);
-  }
+  // initialize the load animation
+  //loadState = 0;
+  loadAnimation();
 }
 
 
