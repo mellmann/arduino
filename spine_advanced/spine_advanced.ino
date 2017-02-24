@@ -74,8 +74,8 @@ int puls_position = -puls_length;
 
 
 // blink animation
-const int blinkTimeOn = 500; // in ms
-const int blinkTimeOff = 500; // in ms
+const int blinkTimeOn = 100; // in ms
+const int blinkTimeOff = 100; // in ms
 const int blinkNumber = 3;
 // 
 int blinkCount = 0; // number of executed blinks
@@ -157,7 +157,7 @@ void loadAnimation()
   blinkBegin = loadState;
   blinkEnd   = loadState + loadStep;
   
-  if(blinkCount < 2*blinkNumber) {
+  if(blinkCount < 2*blinkNumber+1) {
     blinkAnimation();
   } else {
     loadState = min(loadState + loadStep, NUMPIXELS);
