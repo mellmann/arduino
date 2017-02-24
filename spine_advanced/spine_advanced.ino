@@ -43,6 +43,14 @@ void setup() {
 uint32_t max_brightness = 10;
 uint32_t max_delay = 50;
 
+// animation state
+enum AnimationState 
+{
+  LOADING,
+  SIGNAL_DONE_LOADING,
+  RUN_SPINE
+} animation_state;
+
 // pulse shape for the spine animation
 const int puls_length = 12;
 uint32_t colorf[puls_length] = 
@@ -149,9 +157,9 @@ void loadAnimation(){
   blinkEnd   = loadState + loadStep;
   
   if(blinkCount < 2*blinkNumber) {
-    blinkAnimation(blinkBegin, blinkEnd);
+    blinkAnimation();
   } else {
-    loadState = min(loadState + value, NUMPIXELS);
+    loadState = min(loadState + loadStep, NUMPIXELS);
     // reset the blink state
     blinkState = false;
     blinkCount = 0;
@@ -171,12 +179,19 @@ void loop() {
   int val2 = analogRead(1); // #2
   //Serial.println(val2);
   max_delay = map(val2, 0, 1023, 0, 60);
-  
-  //spineAnimation();
 
-  // initialize the load animation
-  //loadState = 0;
-  loadAnimation();
+  switch(animation_state)
+  {
+    case LOADING: 
+      loadAnimation();
+      break;
+    case SIGNAL_DONE_LOADING: 
+      break;
+    case RUN_SPINE: 
+      spineAnimation();
+      break;
+    default: break; // should never happen
+  }
 }
 
 
