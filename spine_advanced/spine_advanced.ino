@@ -194,7 +194,7 @@ void loop() {
       blinkEnd   = NUMPIXELS;
       blinkAnimation();
       strip.show();
-      if(blinkCount > 2*blinkNumber) {
+      if(blinkCount > 2*blinkNumber+1) {
         animation_state = RUN_SPINE;
         timer.reset();
       }
