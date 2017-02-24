@@ -184,6 +184,7 @@ void loop() {
   {
     case LOADING:
       loadAnimation();
+      strip.show();
       if(loadState == NUMPIXELS) { // full
         animation_state = SIGNAL_DONE_LOADING;
       }
@@ -192,6 +193,7 @@ void loop() {
       blinkBegin = 0;
       blinkEnd   = NUMPIXELS;
       blinkAnimation();
+      strip.show();
       if(blinkCount > 2*blinkNumber) {
         animation_state = RUN_SPINE;
         timer.reset();
