@@ -151,7 +151,8 @@ void blinkAnimation()
 }
 
 
-void loadAnimation(){
+void loadAnimation()
+{
   // blink the next pixels to be loaded
   blinkBegin = loadState;
   blinkEnd   = loadState + loadStep;
@@ -167,7 +168,6 @@ void loadAnimation(){
   }
 }
 
-
 void loop() {
 
   // read the control values
@@ -182,13 +182,27 @@ void loop() {
 
   switch(animation_state)
   {
-    case LOADING: 
+    case LOADING:
       loadAnimation();
+      if(loadState == NUMPIXELS) { // full
+        animation_state = SIGNAL_DONE_LOADING;
+      }
       break;
     case SIGNAL_DONE_LOADING: 
+      blinkBegin = 0;
+      blinkEnd   = NUMPIXELS;
+      blinkAnimation();
+      if(blinkCount > 2*blinkNumber) {
+        animation_state = RUN_SPINE;
+        timer.reset();
+      }
       break;
     case RUN_SPINE: 
       spineAnimation();
+      if(timer.getDuration() > 3000) {
+        timer.reset();
+        animation_state = LOADING;
+      }
       break;
     default: break; // should never happen
   }
