@@ -40,7 +40,7 @@ void setup() {
 }
 
 // control parameter for the brightness
-uint32_t max_brightness = 10;
+uint32_t max_brightness = 128;
 uint32_t max_delay = 50;
 
 // animation state
@@ -137,7 +137,7 @@ void blinkAnimation()
   if(!blinkState && timer.getDuration() > blinkTimeOff) {
     blinkState = true;
     timer.reset();
-    setPixel(blinkBegin, blinkEnd, 128); // max brigtness?
+    setPixel(blinkBegin, blinkEnd, max_brightness);
     blinkCount++; // count the on states
   }
   
