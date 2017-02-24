@@ -8,8 +8,8 @@
 #define NUMPIXELS 72 // Number of LEDs in strip
 
 // Here's how to control the LEDs from any two pins:
-#define DATAPIN    0
-#define CLOCKPIN   1
+#define DATAPIN    A0
+#define CLOCKPIN   A1
 
 Adafruit_DotStar strip = Adafruit_DotStar(
   NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_RGB);
@@ -74,8 +74,8 @@ int puls_position = -puls_length;
 
 
 // blink animation
-const int blinkTimeOn = 100; // in ms
-const int blinkTimeOff = 100; // in ms
+const int blinkTimeOn = 300; // in ms
+const int blinkTimeOff = 500; // in ms
 const int blinkNumber = 3;
 // 
 int blinkCount = 0; // number of executed blinks
@@ -89,6 +89,7 @@ MyTimer timer; // used by blink
 // load animation
 int loadState = 0;
 int loadStep = 3;
+int maxLoadStep = 4;
 
 
 
@@ -156,11 +157,12 @@ void loadAnimation()
   // blink the next pixels to be loaded
   blinkBegin = loadState;
   blinkEnd   = loadState + loadStep;
-  
+
   if(blinkCount < 2*blinkNumber+1) {
     blinkAnimation();
   } else {
     loadState = min(loadState + loadStep, NUMPIXELS);
+    loadStep = (int)random(1, maxLoadStep + 1);
     // reset the blink state
     blinkState = false;
     blinkCount = 0;
