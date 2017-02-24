@@ -76,7 +76,7 @@ int puls_position = -puls_length;
 // blink animation
 const int blinkTimeOn = 300; // in ms
 const int blinkTimeOff = 500; // in ms
-const int blinkNumber = 3;
+const int blinkNumber = 4;
 // 
 int blinkCount = 0; // number of executed blinks
 bool blinkState = false; // false ~ off, true ~on
@@ -89,7 +89,7 @@ MyTimer timer; // used by blink
 // load animation
 int loadState = 0;
 int loadStep = 3;
-int maxLoadStep = 4;
+int maxLoadStep = 3;
 
 
 
