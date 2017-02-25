@@ -6,7 +6,7 @@
   #include <avr/power.h>
 #endif
 
-#define NUMPIXELS 600 // Number of LEDs in strip
+#define NUMPIXELS 300 // Number of LEDs in strip
 
 // Here's how to control the LEDs from any two pins:
 #define DATAPIN    2
@@ -16,27 +16,20 @@
 // example for more information on possible values.
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMPIXELS, DATAPIN, NEO_GRB + NEO_KHZ800);
 
-void setup() {
-
-  strip.begin(); // Initialize pins for output
-//  strip.show();  // Turn all LEDs off ASAP
-}
 
 // Runs 10 LEDs at a time along strip, cycling through red, green and blue.
 // This requires about 200 mA for all the 'on' pixels + 1 mA per 'off' pixel.
 
-uint32_t max_brightness = 10;
-uint32_t max_delay = 50;
+uint32_t max_brightness = 15;
+uint32_t max_delay = 36;
 
 uint32_t color = 128;
 uint32_t fade  = 0;
 
-int puls_length = 12;
-int puls_position = -puls_length;
-
 uint32_t t = 0;
 
-uint32_t colorf[12] = 
+const int template_length = 12;
+uint32_t colorTemplate[template_length] = 
 {
   1,
   60,
@@ -51,6 +44,25 @@ uint32_t colorf[12] =
   10,
   1
 };
+
+const int factor = 4;
+const int puls_length = template_length*factor;
+uint32_t* colorf = new uint32_t[puls_length];
+
+int puls_position = -puls_length;
+
+
+void setup() {
+  strip.begin(); // Initialize pins for output
+  strip.show();  // Turn all LEDs off ASAP
+
+  for(int i = 0; i < template_length; ++i) {
+    for(int j = 0; j < factor; ++j) {
+      colorf[i*factor + j] = colorTemplate[i];
+    }
+  }
+}
+
 
 void setB(uint16_t n, uint8_t value) {
     strip.setPixelColor(n,value,value,value);
@@ -71,9 +83,9 @@ void spineControl()
   for(int i = 0; i < puls_length; i++) {
     int x = puls_position + i + 1;
     if(x >= 0 && x < NUMPIXELS) {
-      uint32_t c = map(colorf[12-i-1], 0, 255, 0, max_brightness);
+      uint32_t c = map(colorf[puls_length-i-1], 0, 255, 0, max_brightness);
       
-      if(colorf[12-i-1] > 0) {
+      if(colorf[puls_length-i-1] > 0) {
         c = max(1,c);
       }
       setB(x, c);
@@ -97,11 +109,11 @@ void loop() {
   int val = analogRead(3); // #3?
   //Serial.print(val);
   //Serial.print(", ");
-  max_brightness = map(val, 0, 1023, 0, 255);
+  //max_brightness = map(val, 0, 1023, 0, 255);
   
   int val2 = analogRead(1); // #2
   //Serial.println(val2);
-  max_delay = map(val2, 0, 1023, 0, 60);
+  //max_delay = map(val2, 0, 1023, 0, 60);
   
   spineControl();
 }
