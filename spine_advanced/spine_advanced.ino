@@ -21,8 +21,17 @@
 #define NUMPIXELS 72 // Number of LEDs in strip
 
 // Here's how to control the LEDs from any two pins:
-#define DATAPIN    A0
-#define CLOCKPIN   A1
+//#define DATAPIN    A0
+//#define CLOCKPIN   A1
+//#define POTTI1     1
+//#define POTTI2     3
+
+// pins for UNO Controller
+#define DATAPIN    4
+#define CLOCKPIN   5
+#define POTTI1     A0
+#define POTTI2     A1
+
 
 Adafruit_DotStar strip = Adafruit_DotStar(
   NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_RGB);
@@ -154,7 +163,7 @@ void blinkAnimation()
   if(!blinkState && timer.getDuration() > blinkTimeOff) {
     blinkState = true;
     timer.reset();
-    setPixel(blinkBegin, blinkEnd, 128);
+    setPixel(blinkBegin, blinkEnd, max_brightness);
     blinkCount++; // count the on states
   }
   
@@ -189,15 +198,16 @@ void loadAnimation()
 void loop() {
 
   // read the control values
-  int val = analogRead(3); // #3?
+  int val = analogRead(POTTI2); // #3?
   //Serial.print(val);
   //Serial.print(", ");
-  //max_brightness = map(val, 0, 1023, 0, 255);
+  max_brightness = map(val, 0, 1023, 0, 255);
   
-  int val2 = analogRead(1); // #2
+  int val2 = analogRead(POTTI1); // #1
   //Serial.println(val2);
-  //max_delay = map(val2, 0, 1023, 0, 60);
+  max_delay = map(val2, 0, 1023, 0, 60);
   
+  //animation_state = RUN_SPINE;
   switch(animation_state)
   {
     case LOADING:
@@ -219,7 +229,7 @@ void loop() {
       break;
     case RUN_SPINE: 
       spineAnimation();
-      if(timer.getDuration() > 15000 && puls_position == 0) {
+      if(timer.getDuration() > 15000 && puls_position == NUMPIXELS) {
         timer.reset();
         animation_state = LOADING;
         setPixel(0,NUMPIXELS,0);
